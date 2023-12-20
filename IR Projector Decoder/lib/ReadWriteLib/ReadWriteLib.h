@@ -1,15 +1,16 @@
 /*
 ReadWriteLib.h
-Copyright (C) 2023 NPLinh
+Copyright (C) 2023 deLini1612 (Linh Nguyen Phuong)
 
 - This is a part of final project of System Embedded course at HUST, semester 20231
-- This lib is used for reading or writing to an digital pin in a faster way than digitalRead function provied by Adruino
+- This lib is used for reading or writing to an digital pin of ATmega328P in a faster way than digitalRead function provied by Adruino
 - This lib will use barenmetal approach
 
 - I/O map: ATmega328P has 3 ports
     + Port B: Pins 8 to 13 (as PB0 to PB5)
     + Port C: Pins A0 to A5 (as PC0 to PC5)
     + Port D: Pins 0 to 7 (as PD0 to PD7)
+
 - The are 3 main reg to control state of a I/O port:
     + PORT: Data Register               --> Writing data to the output pin or configure pull up of input pin (reset: tri-stated)
         * Input pin: 1 = ACtivate Pull Up, 0 = Disable Pull Up 

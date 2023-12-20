@@ -1,6 +1,6 @@
 /*
 IRLib.h
-Copyright (C) 2023 NPLinh
+Copyright (C) 2023 deLini1612 (Linh Nguyen Phuong)
 
 - This is a part of final project of System Embedded course at HUST, semester 20231
 - This lib is used for ...  //TODO: Write the remaining intro
