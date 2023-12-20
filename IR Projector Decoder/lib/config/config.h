@@ -1,0 +1,3 @@
+#define IR_RECEIVER_PIN    3
+#define IR_LED_PIN 13
+#define USE_USER_ISR_IR_RECEIVER_CB
