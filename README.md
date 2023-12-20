@@ -20,8 +20,8 @@ The repository includes the following components:
 
 - **Source Code**: The detailed source code with comprehensive Readme can be found in [this folder](./IR%20Projector%20Decoder).
 - **PCB Layout**: The layout of the printed circuit board (PCB) used in the project.
-- **Report**: A comprehensive report detailing the project.
-- **Presentation Slides**: Slide deck for the final project presentation.
+- **Report**: A comprehensive report detailing the project as well as a slide deck for the final project presentation.
+- **Docs**: Containing others documentations (such as MCU's datasheet) that we use.
 - **Demo Video**: A video to demo the final product.
 
 
@@ -41,6 +41,7 @@ This project utilizes the following resources:
 - **Display Unit**: LCD.
 
 ## Functionality
+//TODO: Modify it later
 
 The product provides the following functionalities:
 
@@ -55,3 +56,5 @@ To get started with the project, navigate to the [this folder](./IR%20Projector%
 Feel free to explore and contribute to the development of this Embedded System project! If you have any questions or suggestions, please reach out to the project maintainers.
 
 Happy coding!
+
+*By Linh Nguyen Phuong (deLini), December 2023*
