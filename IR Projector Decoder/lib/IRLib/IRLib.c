@@ -10,8 +10,7 @@ ir_receiver_t receiver_controller;
     + micros() returns an unsigned long integer representing the number of microseconds that have passed since the program started running
 */
 void ir_isr_handler_cb(void) {
-    //Use uint_fast8_t instead of uint8_t --> fastest unsigned int with at least 8 bits //TODO: Is it really necessary
-    uint_fast8_t ir_input = ReadPin(IR_RECEIVER_PIN);
+    uint8_t ir_input = ReadPin(IR_RECEIVER_PIN);
 
     uint32_t current_time_micros = micros();
     uint32_t symbol_len_micro = current_time_micros - receiver_controller.last_sym_change_micro; //Length of current symbol (can be a pulse or space) in microsecond
@@ -39,7 +38,7 @@ void ir_isr_handler_cb(void) {
             if(((NEC_BIT_PULSE/2) <= symbol_len_micro)
                 && (symbol_len_micro <= (NEC_BIT_PULSE*3/2))) {
                 //Check if current bit >= data length --> It's stop bit 
-                if ((receiver_controller.current_bit_index >= NEC_DATA_LEN) || (receiver_controller.flag == IR_REPEAT_CODE_FLG)) {
+                if (receiver_controller.current_bit_index >= NEC_DATA_LEN) {
                     //Done a frame --> reset for others frame
                     next_state = RECEIVER_IDLE_S;
 
@@ -53,7 +52,8 @@ void ir_isr_handler_cb(void) {
                     
                     //Enable interrupt
                     // __asm__ __volatile__ ("sei" ::: "memory");
-                    ir_receive_data.address = receiver_controller.raw_data.ir_data_field.inv_command;
+                    ir_receive_data.address = receiver_controller.raw_data.ir_data_field.address;
+                    ir_receive_data.last_command = ir_receive_data.command;
                     ir_receive_data.command = receiver_controller.raw_data.ir_data_field.command;
                     ir_receive_data.flag = receiver_controller.flag;
                     ir_receive_data.data_valid = true;
@@ -92,6 +92,10 @@ void ir_isr_handler_cb(void) {
         if (next_state == RECEIVER_IDLE_S) {
             //receive a pulse --> go into AGC burst phase
             next_state = RECEIVER_WAIT_START_SPACE_S;
+            //Check for repeat frame
+            if ((symbol_len_micro < NEC_MAX_REPEAT_SPACE)&&(ir_receive_data.last_command == ir_receive_data.command)) {
+                receiver_controller.flag = IR_REPEAT_CODE_FLG;
+            }
         }
 
         else if (next_state == RECEIVER_WAIT_FIRST_DATA_PULSE_S) {
@@ -103,14 +107,6 @@ void ir_isr_handler_cb(void) {
                 receiver_controller.current_bit_index = 0;
                 receiver_controller.raw_data.data = 0;
                 next_state = RECEIVER_WAIT_DATA_SPACE_S;
-            }
-            //Else, if (repeat space length*3/4 <= actual len <= repeat space length*5/4) and number of bit we store is >= total data length of NEC
-            //--> repeat frame
-            else if (((NEC_REPEAT_SPACE*3/4) <= symbol_len_micro) 
-                    && (symbol_len_micro <= (NEC_REPEAT_SPACE*5/4))
-                    && (receiver_controller.current_bit_index >= NEC_DATA_LEN)) {
-                next_state = RECEIVER_WAIT_DATA_SPACE_S;
-                receiver_controller.flag = IR_REPEAT_CODE_FLG;
             }
             //Fail cause wrong last space length --> reset FSM
             else {
@@ -157,7 +153,6 @@ void ir_isr_handler_cb(void) {
 */
 bool ir_recv_init() {
     pinMode(IR_RECEIVER_PIN, INPUT);
-    pinMode(IR_LED_PIN, OUTPUT);
     return isr_enable();
 }
 

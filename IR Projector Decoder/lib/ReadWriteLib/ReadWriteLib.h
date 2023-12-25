@@ -47,13 +47,13 @@ Copyright (C) 2023 deLini1612 (Linh Nguyen Phuong)
 #define PinToBit(pin)           ((pin<8)?pin:((pin<14)?(pin-8):(pin-14)))   //Convert pin number to bit index in reg
 
 //================ Operator with pin number ================
-//Remember to use __builtin_constant_p to check whether pinNum and value are known to be a compile-time constant
 
+//Remember to use __builtin_constant_p to check whether pinNum and value are known to be a compile-time constant
 #define ReadPin(pinNum) \
    (int) \
    ((__builtin_constant_p(pinNum))? \
         ((READ(PinToPIN(pinNum), PinToBit(pinNum)))?HIGH:LOW) \
-        :digitalRead(pinNum))   //TODO: Check why line 389 need ?HIGH:LOW (digitalWrite.h)
+        :digitalRead(pinNum))
 
 #define WritePin(pinNum, value) \
  if (__builtin_constant_p(pinNum)) { \

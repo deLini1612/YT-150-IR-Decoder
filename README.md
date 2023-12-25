@@ -41,7 +41,7 @@ This project utilizes the following resources:
 - **Display Unit**: LCD.
 
 ## Functionality
-//TODO: Modify it later
+//TODO: Modify it later when done the project
 
 The product provides the following functionalities:
 
@@ -51,7 +51,7 @@ The product provides the following functionalities:
 
 ## Getting Started
 
-To get started with the project, navigate to the [this folder](./IR%20Projector%20Decoder), where you will find the source code and related files. Make sure to follow the guidelines mentioned in the project documentation.
+To get started with the project, navigate to the [this folder](./IR%20Projector%20Decoder), where you will find the source code and related files. Make sure to follow the [guidelines](./IR%20Projector%20Decoder/README.md) mentioned in the project documentation.
 
 Feel free to explore and contribute to the development of this Embedded System project! If you have any questions or suggestions, please reach out to the project maintainers.
 

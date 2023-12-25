@@ -51,7 +51,7 @@ This section will guide you through the steps to run my program and use IRLib to
 
 ### Using IRLib Library in Your Own Source Code
 
-1. Integrate the IRLib library into your project and define all macros, pins that you want to use.
+1. Integrate the IRLib library into your project and define all macros, pins that you want to use in [config file](lib/config/config.h).
 2. Utilize the library to detect and decode raw NEC IR signals in your source code.
 3. Experiment by pressing all buttons on your remote to identify the decoding commands for your specific remote. Then you can code your own programe to handle with each button.
 

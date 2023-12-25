@@ -4,7 +4,6 @@ Copyright (C) 2023 deLini1612 (Linh Nguyen Phuong)
 
 - This is a part of final project of System Embedded course at HUST, semester 20231
 - This lib is used for ...  //TODO: Write the remaining intro
-//TODO: If have time, write summary about functions we use in the project
 
 - NEC Protocol:
     + Reference: https://techdocs.altium.com/display/FPGA/NEC+Infrared+Transmission+Protocol
@@ -16,7 +15,7 @@ Copyright (C) 2023 deLini1612 (Linh Nguyen Phuong)
         * LBS is transmited first
         * 24 (16 + 8) start bursts + 8 bit address + 8 bit inverted address + 8 bit command + 8 bit inverted command + 1 stop burst.
     + Repeated Frame (Each 110ms):
-        * Each 110ms --> 16 pulse bursts + 4 space bursts + 1 pulse burst
+        * Each 110ms --> Repeat all original frame (NEC2)
 
 - Provide user isr callback by define USE_USER_ISR_IR_RECEIVER_CB in user's code user_ir_isr_handle()
 
@@ -52,11 +51,6 @@ extern "C" {
 // #define IR_RECEIVER_PIN 2
 #endif  //ends for define IR_RECEIVER_PIN
 
-#ifndef IR_LED_PIN
-#warning "IR LED pin for debug purpose is not defined. It will be set to built-in LED in Adruino board, which is pin 13"
-#define IR_LED_PIN LED_BUILTIN
-#endif //ends for define IR_LED_PIN
-
 //================== Define NEC param ==================
 #ifndef NEC_BURST
 
@@ -77,6 +71,7 @@ extern "C" {
 #define NEC_REPEAT_PULSE        (16 * NEC_BURST)    // nearly 9000
 
 #define NEC_REPEAT_INTERVAL     110000
+#define NEC_MAX_REPEAT_SPACE    (NEC_REPEAT_INTERVAL - NEC_START_PULSE - NEC_START_SPACE - 65*NEC_BURST)
 
 #endif // ends NEC_BURST --> define NEC param
 
@@ -151,6 +146,7 @@ typedef struct ir_receiver_t {
 typedef struct ir_receiver_data_cb_t {
     uint8_t address;
     uint8_t command;
+    uint8_t last_command;
     uint8_t flag;
     bool data_valid; // Is set true if new data is available
 }ir_receiver_data_cb_t;

@@ -84,11 +84,10 @@ volatile ir_receiver_data_cb_t ir_receive_data;
 
 void setup() {
     Serial.begin(115200);
-    Serial.println(F("START " __FILE__ " from " __DATE__));
+    Serial.println(F("START " __FILE__ " from " __DATE__\n));
     if (!ir_recv_init()) {
         Serial.println("No interrupt available for your IR pin");
     }
-    Serial.println("====Welcome to our IR receiver====");
 }
 
 void loop() {
