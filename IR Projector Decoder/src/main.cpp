@@ -80,38 +80,199 @@
 #include <IRLib.h>
 #include <config.h>
 
+#ifdef TEST_IR_LCD
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
+#endif
+
 volatile ir_receiver_data_cb_t ir_receive_data;
 
-void setup() {
-    Serial.begin(115200);
-    Serial.println(F("START " __FILE__ " from " __DATE__\n));
-    if (!ir_recv_init()) {
-        Serial.println("No interrupt available for your IR pin");
+#ifdef TEST_IR_LCD
+#define P_OFF     0
+#define P_ON      1
+
+#define P_NORMAL  0
+#define P_ECO     1
+#define P_BLANK   2
+#define P_FREEZE  3
+
+String status[4] = {"NORMAL", "ECO", "BLANK", "FREEZE"};
+
+LiquidCrystal_I2C lcd(0x27,16,2); //0x27 = địa chỉ I2c; 16 và 12 là kích thước LCD 16x2
+
+typedef struct projector_t {
+    bool power;
+    uint8_t state;
+    uint8_t volumn;
+}projector_t;
+
+projector_t projector; 
+
+void init_projector(projector_t *p) {
+  p->power = P_OFF;
+  p->state = P_NORMAL;
+  p->volumn = 100;
+}
+
+void projector_display(projector_t p){
+  lcd.clear();
+  lcd.setCursor(3,0);
+  lcd.print("MODE:");
+  lcd.print(status[p.state]);
+  lcd.setCursor(3,1);
+  lcd.print("VOLUMN:");
+  lcd.print(p.volumn/2);
+}
+
+void update_projector(projector_t *p)
+{
+  if (ir_receive_data.command == 11) { //power
+    if (ir_receive_data.flag == IR_NEW_CODE_FLG) {
+      p->power = !(p->power);
+      if(p->power) lcd.backlight();
+      else p->state = P_NORMAL;
     }
+  }
+  else if (p->power) {
+    switch (ir_receive_data.command)
+    {
+        case 58:
+            if (ir_receive_data.flag == IR_NEW_CODE_FLG) {
+                if (p->state == P_BLANK) p->state = P_NORMAL;
+                else p->state = P_BLANK;
+            }
+            break;
+        case 59:
+            if (ir_receive_data.flag == IR_NEW_CODE_FLG) {
+                if (p->state == P_FREEZE) p->state = P_NORMAL;
+                else p->state = P_FREEZE;
+            }       
+            break;
+        case 60:
+            if (ir_receive_data.flag == IR_NEW_CODE_FLG) {
+                if (p->state == P_ECO) p->state = P_NORMAL;
+                else p->state = P_ECO;
+            }       
+            break;
+        case 44:
+            if(p->volumn < 200) p->volumn++;
+            break;
+        case 47:
+            if(p->volumn > 0) p->volumn--;
+            break;
+        default:
+          ;//other
+      }
+  }
+}
+#endif
+
+void setup() {
+  Serial.begin(115200);
+  Serial.println(F("START " __FILE__ " from " __DATE__"\n"));
+  if (!ir_recv_init()) {
+      Serial.println("No interrupt available for your IR pin");
+  }
+
+  #ifdef TEST_IR_LCD
+  lcd.init();                    
+  lcd.backlight(); //Bật đèn nền LCD
+  lcd.setCursor(3,0);
+  lcd.print("IR Decoder");
+  lcd.setCursor(1,1);
+  lcd.print("LinhHieuDuong!");
+  init_projector(&projector);
+  delay(2000);
+  lcd.noBacklight();
+  lcd.clear();
+  #endif
 }
 
 void loop() {
-    if (ir_receive_data.data_valid) {
-        ir_receive_data.data_valid = false;
-        Serial.print(F("Address = "));
-        Serial.print(ir_receive_data.address);
-        Serial.print(F(" Command = "));
-        Serial.print(ir_receive_data.command);
-        
-        if (ir_receive_data.flag == IR_NEW_CODE_FLG) {
-            Serial.println(" -N");
-        }
-        else if (ir_receive_data.flag == IR_REPEAT_CODE_FLG) {
-            Serial.println(" -R");
-        }
-        else if (ir_receive_data.flag == IR_PARITY_ERROR_FLG) {
-            Serial.println(" -E");
-        }
-    }
-}
+  if (ir_receive_data.data_valid) {
+    ir_receive_data.data_valid = false;
 
+    #ifdef TEST_IR_SERIAL
+    Serial.print(F("Address = "));
+    Serial.print(ir_receive_data.address);
+    Serial.print(F(" Command = "));
+    Serial.print(ir_receive_data.command);
+    
+    if (ir_receive_data.flag == IR_NEW_CODE_FLG) {
+        Serial.println(" -N");
+    }
+    else if (ir_receive_data.flag == IR_REPEAT_CODE_FLG) {
+        Serial.println(" -R");
+    }
+    else if (ir_receive_data.flag == IR_PARITY_ERROR_FLG) {
+        Serial.println(" -E");
+    }
+    #endif
+
+    #ifdef TEST_IR_LCD
+    update_projector(&projector);
+    if(projector.power == P_ON) projector_display(projector);
+    else 
+    {
+      lcd.noBacklight();
+      lcd.clear();
+    }
+    #endif
+  }
+}
 
 void user_ir_isr_handle()
 {
+  #ifdef TEST_IR_SERIAL
   Serial.print("Push a button: ");
+  #endif
+
+  #ifdef TEST_IR_LCD
+  //user's code
+  #endif
 }
+
+
+
+// // Code để phát hiện địa chỉ I2C
+// #include <Wire.h>
+// #include <Arduino.h>
+
+// void setup() {
+//   Wire.begin();
+//   Serial.begin(115200);
+//   Serial.println(F("START " __FILE__ " from " __DATE__"\n"));
+//   Serial.println("Scanning for I2C devices");
+// }
+
+// void loop() {
+//   byte error_i2c, address_i2c;
+//   int I2C_Devices;
+//   Serial.println("Scanning started");
+//   I2C_Devices = 0;
+//   for(address_i2c = 1; address_i2c < 127; address_i2c++ )
+//   {
+//     Wire.beginTransmission(address_i2c);
+//     error_i2c = Wire.endTransmission();
+
+//     if (error_i2c == 0) {
+//       Serial.print("I2C device found at address_i2c 0x");
+//       if (address_i2c < 16) Serial.print("0");
+//       Serial.println(address_i2c,HEX);
+//       I2C_Devices++;
+//     }
+
+//     else if (error_i2c == 4) 
+//     {
+//       Serial.print("Unknow error_i2c at address_i2c 0x");
+//       if (address_i2c<16) Serial.print("0");
+//       Serial.println(address_i2c,HEX);
+//     } 
+//   }
+  
+//   if (I2C_Devices == 0) 
+//     Serial.println("No I2C device connected \n");
+//   else
+//     Serial.println("Done I2C device searching\n");
+//   delay(2000); 
+// }

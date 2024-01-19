@@ -42,19 +42,22 @@ void ir_isr_handler_cb(void) {
                     //Done a frame --> reset for others frame
                     next_state = RECEIVER_IDLE_S;
 
-                    if (receiver_controller.flag != IR_REPEAT_CODE_FLG) {
+                    ir_receive_data.address = receiver_controller.raw_data.ir_data_field.address;
+                    ir_receive_data.last_command = ir_receive_data.command;
+                    ir_receive_data.command = receiver_controller.raw_data.ir_data_field.command;
+
+                    // update flag
+                    if (receiver_controller.flag == IR_REPEAT_CODE_FLG) {
+                        if (ir_receive_data.last_command != ir_receive_data.command) receiver_controller.flag = IR_NEW_CODE_FLG;
+                    }
+                    else {
                         receiver_controller.flag = IR_NEW_CODE_FLG;
                     }
-                    
+
                     if ((receiver_controller.raw_data.ir_data_field.command ^ receiver_controller.raw_data.ir_data_field.inv_command) != 0xFF) {
                       receiver_controller.flag = IR_PARITY_ERROR_FLG;
                     }
                     
-                    //Enable interrupt
-                    // __asm__ __volatile__ ("sei" ::: "memory");
-                    ir_receive_data.address = receiver_controller.raw_data.ir_data_field.address;
-                    ir_receive_data.last_command = ir_receive_data.command;
-                    ir_receive_data.command = receiver_controller.raw_data.ir_data_field.command;
                     ir_receive_data.flag = receiver_controller.flag;
                     ir_receive_data.data_valid = true;
 
@@ -81,19 +84,15 @@ void ir_isr_handler_cb(void) {
     }
 
     else {
-        //IR_RECEIVER_PIN is in LOW state --> Have a pulse
-        if (symbol_len_micro > 2*NEC_START_PULSE) {
-            //reset FSM due to time_out
-            next_state = RECEIVER_IDLE_S;
-            receiver_controller.flag = IR_EMPTY_FLG;
-        }
-
 
         if (next_state == RECEIVER_IDLE_S) {
             //receive a pulse --> go into AGC burst phase
             next_state = RECEIVER_WAIT_START_SPACE_S;
+            receiver_controller.flag = IR_EMPTY_FLG;
+
             //Check for repeat frame
-            if ((symbol_len_micro < NEC_MAX_REPEAT_SPACE)&&(ir_receive_data.last_command == ir_receive_data.command)) {
+            // if ((symbol_len_micro < NEC_MAX_REPEAT_SPACE)&&(ir_receive_data.last_command == ir_receive_data.command)) {
+            if ((symbol_len_micro < NEC_MAX_REPEAT_SPACE)) {
                 receiver_controller.flag = IR_REPEAT_CODE_FLG;
             }
         }
