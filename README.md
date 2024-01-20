@@ -38,7 +38,6 @@ While the simulation doesn't modify physical projector parameters, it showcases 
 The repository includes the following components:
 
 - **Source Code**: The detailed source code with comprehensive Readme can be found in [this folder](./IR%20Projector%20Decoder).
-- **PCB Layout**: The layout of the printed circuit board (PCB) used in the project.
 - **Report**: A comprehensive report detailing the project as well as a slide deck for the final project presentation.
 - **Docs**: Containing others documentations (such as MCU's datasheet) that we use.
 - **Demo Video**: A video to demo the final product can be found [here](./Media/Demo.mp4).
