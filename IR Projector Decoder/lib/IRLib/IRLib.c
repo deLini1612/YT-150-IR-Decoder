@@ -147,7 +147,7 @@ void ir_isr_handler_cb(void) {
 
 /**
  * Init function for IR receiver
- *      + Init GPIO Mode for needed GPIO: Set IR_RECEIVER_PIN as Input and IR_LED_PIN as Output
+ *      + Init GPIO Mode for needed GPIO: Set IR_RECEIVER_PIN as Input
  *      + Enable ISR
 */
 bool ir_recv_init() {
