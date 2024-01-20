@@ -3,7 +3,9 @@ IRLib.h
 Copyright (C) 2023 deLini1612 (Linh Nguyen Phuong)
 
 - This is a part of final project of System Embedded course at HUST, semester 20231
-- This lib is used for ...  //TODO: Write the remaining intro
+- This lib is used to detect and decode a NEC protocol frame based on logic change interrupt in a pin of ATmaga328P.
+- The decoded frame includes address, command and flag. It will be stored in ir_receive_data variable.
+- Provide user isr callback by define USE_USER_ISR_IR_RECEIVER_CB in user's code user_ir_isr_handle()
 
 - NEC Protocol:
     + Reference: https://techdocs.altium.com/display/FPGA/NEC+Infrared+Transmission+Protocol
@@ -16,8 +18,6 @@ Copyright (C) 2023 deLini1612 (Linh Nguyen Phuong)
         * 24 (16 + 8) start bursts + 8 bit address + 8 bit inverted address + 8 bit command + 8 bit inverted command + 1 stop burst.
     + Repeated Frame (Each 110ms):
         * Each 110ms --> Repeat all original frame (NEC2)
-
-- Provide user isr callback by define USE_USER_ISR_IR_RECEIVER_CB in user's code user_ir_isr_handle()
 
 - Code conventional:
     + _H:       .h library
@@ -151,6 +151,7 @@ typedef struct ir_receiver_data_cb_t {
     bool data_valid; // Is set true if new data is available
 }ir_receiver_data_cb_t;
 
+void ir_isr_handler_cb(); 
 bool ir_recv_init();
 bool isr_enable();
 void isr_disable();

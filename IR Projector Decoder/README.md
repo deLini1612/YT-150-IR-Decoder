@@ -91,4 +91,5 @@ The following table lists the decoding commands for the Casio YT-150 projector r
 | 92            | 0x5C          | ASPECT       |
 | 93            | 0x5D          | FUNC         |
 
+---
 *By Linh Nguyen Phuong (deLini), December 2023*

@@ -3,7 +3,7 @@ ReadWriteLib.h
 Copyright (C) 2023 deLini1612 (Linh Nguyen Phuong)
 
 - This is a part of final project of System Embedded course at HUST, semester 20231
-- This lib is used for reading or writing to an digital pin of ATmega328P in a faster way than digitalRead function provied by Adruino
+- This lib is used to read/write to an digital pin of ATmega328P in a faster way than digitalRead function provied by Adruino
 - This lib will use barenmetal approach
 
 - I/O map: ATmega328P has 3 ports
