@@ -2,7 +2,7 @@
 
 - [IRLib](#irlib)
   - [Overview](#overview)
-    - [Code Conventional:](#code-conventional)
+    - [Code Conventional](#code-conventional)
   - [Macros](#macros)
   - [Functions](#functions)
   - [Structures, States, and Flags](#structures-states-and-flags)
@@ -21,7 +21,7 @@
 
 The `IRLib` is a library designed for detecting and decoding [**NEC2 protocol frames**](https://techdocs.altium.com/display/FPGA/NEC+Infrared+Transmission+Protocol) based on logic change interrupts in a pin of ATmega328P. It is part of the final project for the System Embedded course at Hanoi University of Science and Technology (HUST), semester 20231.
 
-### Code Conventional:
+### Code Conventional
 The following prefix suffix is used for easy coding and reading: 
 - `_H`: .h library
 - `_S`: state for FSM
