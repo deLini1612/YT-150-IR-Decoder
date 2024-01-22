@@ -68,6 +68,7 @@ This project utilizes the following resources:
 | LEFT            | Left button of the remote, used to change energy-saving status or decrease energy-saving level. |
 | RIGHT           | Right button of the remote, used to Change energy-saving status or increase energy-saving level. |
 | DOWN            | Down button of the remote, used to select functions in a screen (e.g., adjusting energy-saving level in ECO SCREEN). |
+| UP              | Up button of the remote, used to select functions in a screen. |
 
 ### Functions Operations
 1. Power ON/OFF: POWER button
@@ -87,6 +88,7 @@ This project utilizes the following resources:
    - Display ON/OFF status of eco mode and current saving level (if eco mode is on).
    - Use LEFT/RIGHT button to adjust eco status.
    - To adjust eco level, press DOWN button then using LEFT/RIGHT button to adjust eco level.
+   - After adjusting eco level, you can back to adjust eco status by UP button.
    - In ECO SCREEN, unable to switch modes or adjust volume.
    - Press ESC to return to the MAIN SCREEN.
   

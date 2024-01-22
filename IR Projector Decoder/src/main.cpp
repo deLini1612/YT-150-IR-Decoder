@@ -215,8 +215,9 @@ void update_projector(projector_t *p)
                     else if ((p->eco == 1)&&(ir_receive_data.command == 75)&&(ir_receive_data.flag == IR_NEW_CODE_FLG)) line = 1;
                 }
                 else {
-                    if ((ir_receive_data.command==78)&&(p->eco_level < 5)&&(ir_receive_data.flag == IR_NEW_CODE_FLG)) p->eco_level++;
-                    else if ((ir_receive_data.command==77)&&(p->eco_level > 5)&&(ir_receive_data.flag == IR_NEW_CODE_FLG)) p->eco_level--;
+                    if ((ir_receive_data.command==74)&&(ir_receive_data.flag == IR_NEW_CODE_FLG)) line = 0;
+                    else if ((ir_receive_data.command==78)&&(p->eco_level < 5)&&(ir_receive_data.flag == IR_NEW_CODE_FLG)) p->eco_level++;
+                    else if ((ir_receive_data.command==77)&&(p->eco_level > 0)&&(ir_receive_data.flag == IR_NEW_CODE_FLG)) p->eco_level--;
                 }
             }
         }
