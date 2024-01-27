@@ -18,7 +18,6 @@ Copyright (C) 2023 deLini1612 (Linh Nguyen Phuong)
     + DDR: Data Direction Register      --> Configure direction of the pin
         * 1 = Output, 0 = Input
     + PIN: Input Pins Address           --> Reading input data of input pin or togglling PORT
-        * If write 1 to PIN --> Toggles the value of coressponding bit in PORT reg
 */
 
 #ifndef _READ_WRITE_LIB_H
