@@ -60,8 +60,6 @@ The following prefix suffix is used for easy coding and reading:
 | `ir_isr_handler_cb`  | Callback function by NPLink to store data, decode and assign flag whenever a change in receive pin occurs (DO NOT modify it). | None | None |
 
 
-Certainly! Here's the information formatted in a table for your README:
-
 ## Structures, States, and Flags
 
 ### Structures, Unions
@@ -92,7 +90,6 @@ Certainly! Here's the information formatted in a table for your README:
 | `IR_PARITY_ERROR_FLG`    | Parity error flag                                  |
 
 
-Great! Let's proceed to create the README file for `ReadWriteLib` based on the provided information. I'll structure it according to the same sections as the `IRLib` README.
 
 # ReadWriteLib
 
@@ -104,7 +101,6 @@ The `ReadWriteLib` is a library designed for fast read and write operations on a
 The following prefix suffix is used for easy coding and reading: 
 - `_H`: .h library
 
-Certainly! Here's the updated Macros section in the README file to include `ReadPin` and `WritePin` macros:
 
 ## Macros
 
